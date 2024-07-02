@@ -1,11 +1,10 @@
 import streamlit as st
+import pandas as pd
 from supabase import create_client, Client
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-import pandas as pd
 
 # Substitua com suas informações da Supabase
 URL_SUPABASE = os.getenv('URL_SUPABASE')
@@ -15,7 +14,6 @@ supabase: Client = create_client(URL_SUPABASE, KEY_SUPABASE)
 
 def cadastrar_site(conta):
     try:
-            # Inserir dados na tabela
             supabase.table("contas").insert(
                 {
                     "nome_site": conta.nome,
@@ -26,14 +24,13 @@ def cadastrar_site(conta):
                 }
             ).execute()
 
-            # Exibir mensagem de sucesso
             st.success("Site cadastrado com sucesso!")
     except Exception as e:
         st.error(f"Erro ao cadastrar o site: {e}")
 
-def exibir_dados():
-    # Consultar dados da tabela
+def exibir_dados_filtrados():
     data = supabase.table("contas").select("*").execute().data
+    
     # Verificar se há dados para exibir
     if data:
         for row in data:
@@ -43,18 +40,14 @@ def exibir_dados():
             col2.write(f"Email: {row['email_cadastrado']}")
             col3.write(f"Senha: {row['senha_cadastrada']}")
             col4.write(f"Tags: {', '.join(row['tags'])}")
-
-
-            # ... (exibir outros campos conforme necessário)
-            #st.write(f"**Tags:** {', '.join(row['tags'])}")
     else:
         st.info("Nenhum site cadastrado ainda.")
 
-def ex():
+def exibir_dados_tabela():
     data = supabase.table("contas").select("url_site", "email_cadastrado", "senha_cadastrada", "tags").execute().data
     df = pd.DataFrame(data)
 
-    # Insere a coluna "Logo" no índice 1 durante a criação
+    # Insere a coluna "Logo" no índice 0 durante a criação
     df.insert(0, 'Logo', df['url_site'].apply(gerar_url_logo))
 
     st.data_editor(
@@ -70,7 +63,6 @@ def ex():
         num_rows="dynamic"
     )
 
-
 #Referente as tags↓
 def exibir_tags():
         data = supabase.table("tags").select('nome_tag').execute().data
@@ -82,12 +74,23 @@ def adicionar_nova_tag(nova_tag):
           supabase.table('tags').insert({"nome_tag": nova_tag}).execute()
     except Exception as e:
          st.error(f"Error ao cadastrar nova tag: {e}")
-
-
-
-
 #-----------------------------------
 
+#Referente aos Emails
+def exibir_emails():
+     data = supabase.table("emails").select('email').execute().data
+     df = pd.DataFrame(data)
+     return df
+
+def adicionar_novo_email(novo_email):
+    try:
+          supabase.table('emails').insert({"email": novo_email}).execute()
+    except Exception as e:
+         st.error(f"Error ao cadastrar novo EMAIL: {e}")
+     
+
+#-----------------------------------
+#Api Logo.Dev ↓
 def gerar_url_logo(url_site):
     return f"https://img.logo.dev/www.{url_site}?token=pk_CAf7oMuYSwOwXAq2vzGCdg"
 

@@ -1,6 +1,6 @@
-# Gestor de Contas em Sites
+# Gestor das Contas em Sites
 
-A ideia aqui é fazer um pequeno gestor das inifitas contas que ciramos em sites, alguns deles são pontuais e outros recorrente, porem como sempre ponho senhas diferentes para cada um fica dificil lembrar qual senha é de qual site!!
+A ideia aqui é fazer um pequeno gestor das inifitas contas que criamos em sites, alguns deles são sites pontuais e outros recorrentes, porem como sempre ponho senhas diferentes para cada um, fica dificil lembrar qual senha é de cada site!!
 
 # I. Estrutura de Pastas:
 ```

@@ -1,5 +1,7 @@
 import streamlit as st
 
+#testando possibilidades e funções↓
+
 opt = [".com", ".br"]
 
 col1, col2 = st.columns(2)
@@ -13,3 +15,6 @@ else:
 
 img = f"https://img.logo.dev/{name}?token=pk_CAf7oMuYSwOwXAq2vzGCdg"
 st.image(img)
+st.divider()
+
+

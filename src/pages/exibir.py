@@ -1,3 +1,3 @@
-from src.db.supabase import ex
+from src.db.supabase import exibir_dados_tabela
 
-ex()
+exibir_dados_tabela()
