@@ -1,29 +1,4 @@
-# Gestor das Contas em Sites
-
-A ideia aqui é fazer um pequeno gestor das inifitas contas que criamos em sites, alguns deles são sites pontuais e outros recorrentes, porem como sempre ponho senhas diferentes para cada um, fica dificil lembrar qual senha é de cada site!!
-
-# I. Estrutura de Pastas:
-```
-sites_management/
-├── src/
-│   ├── 0 - docs/    
-│   │   ├── documentação.md   
-│   ├── controllers/    
-│   │   ├── cadastro_controlador.py   
-│   ├── db/    
-│   │   ├── supabase.py   
-│   ├── models/    
-│   │   ├── Conta_modelo.py   
-│   ├── pages/    
-│   │   ├── sobre_view.py   
-│   │   ├── exibir.py   
-│   │   └── cadastrar_view.py              
-├── requirements.txt
-├── app.py.txt
-└── README.md     
-        
-```
-## Gerenciador de Contas de Sites (em Desenvolvimento)
+# Gerenciador de Contas em Sites (em Desenvolvimento)
 
 [![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)](https://github.com/seu-usuario/sites_management)
 
