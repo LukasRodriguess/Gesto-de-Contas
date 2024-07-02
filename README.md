@@ -23,20 +23,6 @@ sites_management/
 └── README.md     
         
 ```
-
-```
-#TODO: Produção ↓
-    * adicionar Hash nas senhas
-    * Aplicar o controller
-    * Organizar as paginas
-    * Fazer com que as alterações feitas na tabela sejam validadas pelo controlador e enviadas ao Banco de dados
-    * Tratar as informações vinda do banco de dados para ficar mais visual
-        * Habilitando e Desabilitando a visualização das senhas na tabela
-    * Finalizar a validação dos dados no Controller e aplicar o fastApi ao BanckEnd
-```
-
-
-
 ## Gerenciador de Contas de Sites (em Desenvolvimento)
 
 [![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)](https://github.com/seu-usuario/sites_management)
