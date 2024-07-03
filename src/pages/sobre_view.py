@@ -1,4 +1,5 @@
 import streamlit as st
+from src.controllers.cadastro_controlador import validar_nome
 
 #testando possibilidades e funções↓
 
@@ -12,9 +13,13 @@ if fim == ".com":
 else:
     name = "www." + name + ".com.br"
 
-
 img = f"https://img.logo.dev/{name}?token=pk_CAf7oMuYSwOwXAq2vzGCdg"
 st.image(img)
 st.divider()
+#---------------------------------------------------------------
 
 
+st.title("Festando Funções ↓")
+texto1 = st.text_input("",placeholder="add URL",label_visibility='collapsed')
+
+validar_nome(texto1)

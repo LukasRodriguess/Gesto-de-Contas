@@ -1,6 +1,8 @@
 import streamlit as st
 import src.models.Conta_modelo as Conta
 
+from src.controllers.cadastro_controlador import validar
+
 #vai ser alterador para o controlador ↓
 from src.db.supabase import cadastrar_site, adicionar_nova_tag, exibir_tags, adicionar_novo_email, exibir_emails
 
@@ -17,7 +19,7 @@ with st.container(border=True):
 
     nome_site = col1.text_input("Nome_site", placeholder="Nome do Site *", label_visibility='collapsed', disabled=habilitar_adicao)
     url_site = col2.text_input("url_site", placeholder="URL do Site *", label_visibility='collapsed', disabled=habilitar_adicao)
-    email_cadastrado = col1.selectbox("email_cadastrado Site", exibir_emails(), placeholder="Email Cadastrado *", label_visibility='collapsed', disabled=habilitar_adicao)
+    email_cadastrado = col1.selectbox("email_cadastrado Site", exibir_emails(), placeholder="Email Cadastrado *",  index=None, label_visibility='collapsed', disabled=habilitar_adicao)
     senha_cadastrada = col1.text_input("senha_cadastrada", placeholder="Senha Cadastrada *", label_visibility='collapsed', type='password', disabled=habilitar_adicao)
     tags_site = col2.multiselect("Tags", exibir_tags(), placeholder="Tags do Site *", label_visibility='collapsed', disabled= habilitar_adicao)
     
@@ -43,10 +45,13 @@ if habilitar_adicao:
         
         #TODO: Passar as informações para o Controlador 
         if nova_tag:
-            adicionar_nova_tag(nova_tag) 
+            #adicionar_nova_tag(nova_tag) 
+            validar(nova_tag)
         if novo_email:
-            adicionar_novo_email(novo_email)
+            #adicionar_novo_email(novo_email)
+            st.write(novo_email)
 
 
         st.form_submit_button("Confirmar", use_container_width=True, type='primary')
 
+ 
