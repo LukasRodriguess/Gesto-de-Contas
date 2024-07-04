@@ -3,20 +3,46 @@ import streamlit as st
 import re
 import requests
 
-#---------------------------------------------------------------
-#TODO: def validar_nome:
-# * Não permitir espaços
-# * Aceitar numeros mas não só numeros
-# * Revisar a quantidade de caracteres permitidos, estou achando 15 muinto
+from src.db.supabase import adicionar_novo_email
 
-def validar_nome(nome): 
-    if not nome or len(nome) < 4: 
-        return False, st.error("Nome inválido: limite Minimo de 4 caracteres.")
-    if len(nome) > 15: 
-        return False, st.error("Nome inválido: limite Maximo de 15 caracteres.")
-    if not re.match(r'^[a-zA-Z\s\'-]+$', nome): 
-        return False, st.error("Nome inválido: Apenas letras, espaços, hífens e apóstrofos.")
-    return True, st.success("Ok")
+#TODO: Observações Gerais
+# - Tratar melhor as saidas de erros de todas as funções para serem diretas e não genericas
+
+#---------------------------------------------------------------
+def validar_nome(nome): #OK
+    if not nome:
+        return False, ""
+
+    nome = nome.strip()  # Remove espaços em branco no início e no fim
+
+     # Verifica se o nome tem pelo menos uma letra
+    if not any(char.isalpha() for char in nome):
+        return False, st.error("Nome inválido: O nome deve conter pelo menos uma letra.")
+
+    # Ignora espaços em branco extras (mantém apenas 1 espaço entre as palavras)
+    nome = " ".join(nome.split())
+
+    # Verifica se o nome está no formato correto (primeira letra de cada palavra em maiúscula)
+    nome_formatado = ""
+    primeira_letra = True
+    for i, char in enumerate(nome):
+        if char.isalpha() and primeira_letra:  # Se é letra e é a primeira da palavra
+            nome_formatado += char.upper()  # Adiciona a primeira letra em maiúscula
+            primeira_letra = False
+        elif char.isspace():
+            nome_formatado += char  # Adiciona espaço
+            primeira_letra = True  # Próxima letra é a primeira de uma nova palavra
+        elif char.isalnum() or char in "-'":
+            nome_formatado += char.lower()  # Adiciona outros caracteres em minúscula
+        else:
+            return False, st.error("Nome inválido: O nome deve conter apenas letras, números, hífens e apóstrofos.")
+
+    # Verifica o comprimento do nome
+    if len(nome_formatado) < 4 or len(nome_formatado) > 15:
+        return False, st.error("Nome inválido: O nome deve ter de 4 há 15 caracteres.")
+
+    st.success(f"Nome válido: {nome_formatado}")
+    return True, nome_formatado
 #---------------------------------------------------------------
 
 #TODO: def validar_email 
@@ -41,6 +67,7 @@ def validar_email(email): #OK
     # 4. Verifica se o domínio está na lista permitida
     dominios_permitidos = ["gmail.com", "hotmail.com", "icloud.com", "outlook.com"]
     if dominio in dominios_permitidos:
+        adicionar_novo_email(email)
         st.success("Email válido!")
         return True
     else:
@@ -81,29 +108,32 @@ def validar_url(url): #OK
     return True
 
 #---------------------------------------------------------------
-
-#---------------------------------------------------------------
-
-#TODO:def validar_senha
-# * Revisar e consertar função inteira
-# 
-# def validar_senha(senha):
-#     if len(senha) < 8:
-#         return False,  st.error("Senha inválida: mínimo de 8 caracteres.")
-#     if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$', senha):
-#         return False,  st.error("Senha inválida: deve conter letras maiúsculas, minúsculas, números e caracteres especiais.")
-#     # Adicione a verificação de senhas fracas
-#     return True, st.success("OK")
+def validar_senha(senha): #OK
+    if len(senha) < 8:
+        return False,  st.error("Senha inválida: mínimo de 8 caracteres.")
+    if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$', senha):
+        return False,  st.error("Senha inválida: deve conter letras maiúsculas, minúsculas, números e caracteres especiais.")
+    # Adicione a verificação de senhas fracas
+    return True, st.success("OK")
 
 # #---------------------------------------------------------------
-#TODO:def validar_tags
-# * Revisar e consertar função inteira
-# * Rever a nescessidade dela existir! 
-# def validar_tags(tags):
-#     if not tags:
-#         return True, st.write("aa")  # Tags opcionais, não há erro
-#     tags_limpas = [tag.strip().lower() for tag in tags.split(',')]  # Limpa e converte para minúsculas
-#     if len(tags_limpas) > 5:  # Limite de 5 tags
-#         return False, st.write("Número máximo de tags excedido.")
-#     # Adicione a verificação de lista permitida
-#     return True, st.write("bb")
+def validar_tags(tag): 
+    if not tag:
+        return True, ""  
+
+    tag = tag.strip().upper()
+
+    if not re.match(r'^[A-Z]+$', tag):  # Verifica se a tag contém apenas letras
+        st.error("A tag deve conter apenas letras.")
+        return False, st.write("kk")
+
+    if len(tag) < 4 or len(tag) > 15:
+        st.error("A tag deve ter entre 4 há 15 caracteres.")
+        return False, ""
+
+    if " " in tag:
+        st.error("A tag não pode conter espaços.")
+        return False, ""
+
+    st.success(f"Tag válida: {tag}")
+    return True, tag
