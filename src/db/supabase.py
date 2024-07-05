@@ -12,6 +12,7 @@ KEY_SUPABASE = os.getenv('KEY_SUPABASE')
 
 supabase: Client = create_client(URL_SUPABASE, KEY_SUPABASE)
 
+#Cadastrar o site ao banco de dados
 def cadastrar_site(conta):
     try:
             supabase.table("contas").insert(
@@ -27,7 +28,9 @@ def cadastrar_site(conta):
             st.success("Site cadastrado com sucesso!")
     except Exception as e:
         st.error(f"Erro ao cadastrar o site: {e}")
+#-----------------------------------
 
+#Referente a exibição da tabela
 def exibir_dados_filtrados():
     data = supabase.table("contas").select("*").execute().data
     
@@ -62,6 +65,7 @@ def exibir_dados_tabela():
         
         num_rows="dynamic"
     )
+#-----------------------------------
 
 #Referente as tags↓
 def exibir_tags():

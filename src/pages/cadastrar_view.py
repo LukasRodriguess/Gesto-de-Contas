@@ -51,7 +51,6 @@ if habilitar_adicao:
             #adicionar_novo_email(novo_email)
             validar_email(novo_email)
 
-
         st.form_submit_button("Confirmar", use_container_width=True, type='primary')
 
 

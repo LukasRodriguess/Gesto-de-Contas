@@ -2,8 +2,9 @@
 import streamlit as st
 import re
 import requests
+from src.db.supabase import adicionar_novo_email, adicionar_nova_tag
 
-from src.db.supabase import adicionar_novo_email
+#icons = ⚠️ / 🚨 / 👍
 
 #TODO: Observações Gerais
 # - Tratar melhor as saidas de erros de todas as funções para serem diretas e não genericas
@@ -11,13 +12,13 @@ from src.db.supabase import adicionar_novo_email
 #---------------------------------------------------------------
 def validar_nome(nome): #OK
     if not nome:
-        return False, ""
+        return False
 
     nome = nome.strip()  # Remove espaços em branco no início e no fim
 
      # Verifica se o nome tem pelo menos uma letra
     if not any(char.isalpha() for char in nome):
-        return False, st.error("Nome inválido: O nome deve conter pelo menos uma letra.")
+        return False, st.toast(":orange[O nome deve conter pelo menos uma letra.]" , icon="⚠️")
 
     # Ignora espaços em branco extras (mantém apenas 1 espaço entre as palavras)
     nome = " ".join(nome.split())
@@ -35,32 +36,31 @@ def validar_nome(nome): #OK
         elif char.isalnum() or char in "-'":
             nome_formatado += char.lower()  # Adiciona outros caracteres em minúscula
         else:
-            return False, st.error("Nome inválido: O nome deve conter apenas letras, números, hífens e apóstrofos.")
+            return False, st.toast(":orange[Nome inválido: O nome deve conter apenas letras, números, hífens e apóstrofos.]" , icon="⚠️")
 
     # Verifica o comprimento do nome
     if len(nome_formatado) < 4 or len(nome_formatado) > 15:
-        return False, st.error("Nome inválido: O nome deve ter de 4 há 15 caracteres.")
+        return False, st.toast(":orange[Nome inválido: O nome deve ter de 4 há 15 caracteres.]", icon="⚠️")
 
-    st.success(f"Nome válido: {nome_formatado}")
     return True, nome_formatado
 #---------------------------------------------------------------
 
-#TODO: def validar_email 
+#TODO: Email: Correções e melhorias
 # * procurar uma forma de validar os dominios_permitidos melhor, com api ou coisa do tipo!
 def validar_email(email): #OK
     if not email:
-        st.error("O campo de email não pode estar vazio.")
+        st.toast(":orange[O campo de email não pode estar vazio.]", icon="⚠️")
         return False
 
     # Verifica se o email segue o padrão de @ e .com
     if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
-        st.error("O formato do email é inválido. Por favor, utilize um formato como 'nome@dominio.com'.")
+        st.toast(":orange[Por favor, utilize um formato como 'nome@dominio.com'.]", icon="⚠️")
         return False
 
     # 3. Extrai o domínio do email
     partes = email.split('@')
     if len(partes) != 2:
-        st.error("O formato do email é inválido. Por favor, utilize um formato como 'nome@dominio.com'.")
+        st.toast(":orange[Por favor, utilize um formato como 'nome@dominio.com'.]", icon="⚠️")
         return False
     dominio = partes[1]
 
@@ -68,17 +68,21 @@ def validar_email(email): #OK
     dominios_permitidos = ["gmail.com", "hotmail.com", "icloud.com", "outlook.com"]
     if dominio in dominios_permitidos:
         adicionar_novo_email(email)
-        st.success("Email válido!")
         return True
     else:
-        st.error("O domínio do email não é permitido. Por favor, utilize um domínio como Gmail, Hotmail, iCloud ou Outlook.")
+        st.toast(":orange[Por favor, utilize um domínio como Gmail, Hotmail, iCloud ou Outlook.]", icon="⚠️")
         return False
 
 #---------------------------------------------------------------
+#TODO: URL: Correções e melhorias
+# - Adicionar API para validar os TLD https://api.domainsdb.info/v1/domains/tld/{tld}
+# - Adicionar um filtro para por as urls em lowercase
 def validar_url(url): #OK
     if not url:
-        st.error("O campo URL não pode estar vazio.")
+        st.toast(':orange[O campo URL não pode estar vazio.]', icon="⚠️")
         return False
+
+    url = url.strip().lower()
 
     # 2. Adiciona "https://" se não estiver presente
     if not url.startswith("https://"):
@@ -89,51 +93,50 @@ def validar_url(url): #OK
         url = url[:8] + "www." + url[8:]
 
     # 4. Verifica se a URL termina com ".com" ou ".com.br"
-    if not re.match(r'^https://www\.[a-zA-Z0-9.-]+\.(com|com\.br)$', url):
-        st.error("O formato da URL é inválido. Por favor, utilize um formato como 'https://www.exemplo.com' ou 'https://www.exemplo.com.br'.")
+    if not re.match(r'^https://www\.[a-zA-Z0-9.-]+\.(com|com\.br|io|gov\.br|org|net)$', url):
+        st.toast(":orange[Por favor, utilize um formato como 'exemplo.com' ou 'exemplo.com.br']", icon="⚠️")
         return False
 
     # 5. (Opcional) Verifica se a URL existe
     try:
         response = requests.get(url)
         if response.status_code != 200:
-            st.error("A URL não foi encontrada.")
+            st.toast(":red-background[A URL não foi encontrada.]", icon="⚠️")
             return False
     except requests.exceptions.RequestException:
-        st.error(f"Erro: A URL não foi encontrada ou está fora do ar.")
+        st.toast(f":red-background[ERROR: A URL não existe.]", icon="🚨")
         return False
 
     # Se todas as verificações forem aprovadas, retorna True
-    st.success("URL válida! ")
     return True
 
 #---------------------------------------------------------------
+#TODO: Senha: Correções e melhorias
+# - Adicionar HASH e criptografia as senhas 
 def validar_senha(senha): #OK
     if len(senha) < 8:
-        return False,  st.error("Senha inválida: mínimo de 8 caracteres.")
+        return False,  st.toast(':orange[Senha inválida: mínimo de 8 caracteres.]', icon="⚠️")
     if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$', senha):
-        return False,  st.error("Senha inválida: deve conter letras maiúsculas, minúsculas, números e caracteres especiais.")
+        return False,  st.toast(':orange[Senha inválida: deve conter letras maiúsculas, minúsculas, números e caracteres especiais.]', icon="⚠️")
     # Adicione a verificação de senhas fracas
-    return True, st.success("OK")
+    return True
 
 # #---------------------------------------------------------------
-def validar_tags(tag): 
+def validar_tags(tag): #OK
     if not tag:
-        return True, ""  
+        return True
 
     tag = tag.strip().upper()
 
     if not re.match(r'^[A-Z]+$', tag):  # Verifica se a tag contém apenas letras
-        st.error("A tag deve conter apenas letras.")
-        return False, st.write("kk")
+        st.toast(':orange[A tag deve conter apenas letras.]', icon="⚠️")
+        return False
 
     if len(tag) < 4 or len(tag) > 15:
-        st.error("A tag deve ter entre 4 há 15 caracteres.")
-        return False, ""
+        st.toast(':orange[Deve ter entre 4 há 15 caracteres.]', icon="⚠️")
+        return False
 
     if " " in tag:
-        st.error("A tag não pode conter espaços.")
-        return False, ""
-
-    st.success(f"Tag válida: {tag}")
-    return True, tag
+        st.toast(':orange[A tag não pode conter espaços.]', icon="⚠️" )
+        return False
+    return True, adicionar_nova_tag(tag)

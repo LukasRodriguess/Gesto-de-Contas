@@ -2,6 +2,10 @@
 
 [![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)](https://github.com/seu-usuario/sites_management)
 
+
+## Tecnologias que estarão no projeto👇🏻
+[![My Skills](https://skillicons.dev/icons?i=django,python,supabase,aws,docker)](https://skillicons.dev)
+
 Este projeto em desenvolvimento visa criar uma aplicação web para gerenciar contas de sites de forma simples e intuitiva. A aplicação permite cadastrar, visualizar e, futuramente, editar e excluir contas.
 
 **Funcionalidades Atuais:**

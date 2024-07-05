@@ -1,0 +1,7 @@
+# Ignore arquivos gerados pelo Python e vscode e venv
+*.pyc
+__pycache__/
+.vscode
+venv
+# Ignore arquivos de configuração local
+.env
