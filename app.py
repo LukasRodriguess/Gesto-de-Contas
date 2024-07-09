@@ -9,10 +9,8 @@ st.set_page_config(page_title="Gerenciador de Contas", page_icon="apple", layout
 
 #Navegador das paginas
 paginas = st.navigation([
-    #st.Page("src/pages/exibir.py", title="Pagina de testes", icon="🔥"),
+    # st.Page("src/pages/exibir.py", title="Pagina de testes", icon="🔥"),
     st.Page("src/pages/cadastrar_view.py", title="Cadastrar Conta"),
-    st.Page("src/pages/sobre_view.py")
+    st.Page("src/pages/sobre_view.py", title="Sobre o App")
 ])
-
-
 paginas.run()
