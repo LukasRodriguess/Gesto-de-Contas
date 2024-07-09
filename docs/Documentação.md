@@ -37,6 +37,7 @@ sites_management/
 │   │   ├── exibir.py   
 │   │   └── cadastrar_view.py              
 ├── requirements.txt
+├── .gitignore
 ├── app.py.txt
 └── README.md     
 ```
@@ -91,3 +92,45 @@ sites_management/
 - A documentação será atualizada conforme o projeto evoluir. 
 
 
+#TODO: Melhorias gerias ↓
+1.  Modularização e Reutilização de Código:
+      - **Funções e validações**: estudar a possbilidade de transformar o controlador e suas funções em uma classe validadora
+      - **Classe modelo**: Adicionar os métodos atualizar_dados e excluir_conta.
+
+2. Tratamento de erros:
+   - **Mensagens de Erro Personalizadas**: As mensagens de erro genéricas podem ser melhoradas para fornecer informações mais específicas ao usuário sobre o problema encontrado.
+   - **Log de Erros**: Implemente um sistema de log para registrar erros e exceções, facilitando a depuração e manutenção do código.
+
+3. Segurança:
+   - **Hashing de Senhas:** Implementar hashing de senhas antes de armazenar no banco de dados. Utilizar bibliotecas como bcrypt ou Argon2
+   - **Sanitização de Dados:** Sanitizar os dados de entrada do usuário para evitar ataques de injeção SQL ou XSS.
+
+4. Interface do Usuário (UI):
+   - **Feedback Visual:** Utilizar elementos visuais para fornecer feedback ao usuário sobre as ações realizadas, como animações, mensagens de sucesso ou erro.
+   - **Layout Responsivo:** Me certificar de que a interface do usuário seja responsiva e se adapte a diferentes tamanhos de tela.
+
+5. Banco de Dados:
+   - **Relacionamentos:** Explorar a possibilidade de criar relacionamentos entre as tabelas do banco de dados (ex: uma tabela de usuários e uma tabela de sites associados a cada usuário).
+   - **Índices:** Criar uma especie de índices nas colunas mais utilizadas nas consultas para otimizar o desempenho do banco de dados.
+
+6. Testes:
+   - **Testes Unitários:** Implementar testes unitários para garantir o funcionamento correto das funções e classes do meu projeto.
+
+7. Documentação:
+   - **Docstrings:** Adicionar docstrings às funções e classes para documentar o código.
+   - **Readme:** Manter o arquivo README.md com informações sobre o projeto, como instalação, uso e contribuições.
+
+8. API Logo.Dev:
+   - **Cache:** Implementar um sistema de cache para armazenar as URLs das logos geradas pela API Logo.Dev, evitando chamadas repetidas à API.
+
+9. Melhorias Específicas:
+   - **Cadastro de Sites:**
+      - **Campos Obrigatórios:** Utilizar o atributo `required` nos campos de formulário para garantir que os campos obrigatórios sejam preenchidos.
+      - **Validação em Tempo Real:** Implementar validações em tempo real para os campos de formulário, fornecendo feedback imediato ao usuário sobre a validade dos dados.
+   - **Exibição de Dados:**
+      - **Paginação:** Implementar paginação para exibir grandes quantidades de dados de forma mais eficiente.
+      - **Filtros e Ordenação:** Permitir que o usuário filtre e ordene os dados exibidos na tabela.
+
+10. Ferramentas:
+   - **Linters:** Utilizar linters como `pylint` ou `flake8` para identificar erros e problemas de estilo no código.
+   - **Formatadores de Código:** Utilizar formatadores de código como `black` ou `yapf` para garantir a consistência do estilo de código.

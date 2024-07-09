@@ -1,27 +1,29 @@
-
 import streamlit as st
 import re
 import requests
 from src.db.supabase import adicionar_novo_email, adicionar_nova_tag
 
-#icons = ⚠️ / 🚨 / 👍
+# icons = ⚠️ / 🚨 / 👍
 
-#TODO: Observações Gerais
+# TODO: Observações Gerais  # [fixme]
 # - Tratar melhor as saidas de erros de todas as funções para serem diretas e não genericas
 
-#---------------------------------------------------------------
-def validar_nome(nome): #OK
+# ---------------------------------------------------------------
+def validar_nome(nome: str):
+    """ Validação de nome """
     if not nome:
         return False
 
-    nome = nome.strip()  # Remove espaços em branco no início e no fim
-
-     # Verifica se o nome tem pelo menos uma letra
-    if not any(char.isalpha() for char in nome):
-        return False, st.toast(":orange[O nome deve conter pelo menos uma letra.]" , icon="⚠️")
+    # Remove espaços em branco no início e no fim
+    nome = nome.strip()  
 
     # Ignora espaços em branco extras (mantém apenas 1 espaço entre as palavras)
     nome = " ".join(nome.split())
+
+    # Verifica se o nome tem pelo menos uma letra e não só numero
+    if not any(char.isalpha() for char in nome):
+        st.toast(":orange[O nome deve conter pelo menos uma letra.]", icon="⚠️")
+        return False
 
     # Verifica se o nome está no formato correto (primeira letra de cada palavra em maiúscula)
     nome_formatado = ""
@@ -36,16 +38,17 @@ def validar_nome(nome): #OK
         elif char.isalnum() or char in "-'":
             nome_formatado += char.lower()  # Adiciona outros caracteres em minúscula
         else:
-            return False, st.toast(":orange[Nome inválido: O nome deve conter apenas letras, números, hífens e apóstrofos.]" , icon="⚠️")
-
+            st.toast(":orange[Nome inválido: O nome deve conter apenas letras, números, hífens e apóstrofos.]", icon="⚠️")
+            return False
+        
     # Verifica o comprimento do nome
     if len(nome_formatado) < 4 or len(nome_formatado) > 15:
-        return False, st.toast(":orange[Nome inválido: O nome deve ter de 4 há 15 caracteres.]", icon="⚠️")
-
+        st.toast(":orange[Nome inválido: O nome deve ter de 4 há 15 caracteres.]", icon="⚠️")
+        return False
     return True, nome_formatado
-#---------------------------------------------------------------
+# ---------------------------------------------------------------
 
-#TODO: Email: Correções e melhorias
+# TODO: Email: Correções e melhorias
 # * procurar uma forma de validar os dominios_permitidos melhor, com api ou coisa do tipo!
 def validar_email(email): #OK
     if not email:
@@ -96,7 +99,6 @@ def validar_url(url): #OK
     if not re.match(r'^https://www\.[a-zA-Z0-9.-]+\.(com|com\.br|io|gov\.br|org|net)$', url):
         st.toast(":orange[Por favor, utilize um formato como 'exemplo.com' ou 'exemplo.com.br']", icon="⚠️")
         return False
-
     # 5. (Opcional) Verifica se a URL existe
     try:
         response = requests.get(url)
@@ -108,7 +110,7 @@ def validar_url(url): #OK
         return False
 
     # Se todas as verificações forem aprovadas, retorna True
-    return True
+    return True, url
 
 #---------------------------------------------------------------
 #TODO: Senha: Correções e melhorias
