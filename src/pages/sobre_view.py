@@ -7,9 +7,6 @@ st.markdown(
 ###### [![Em desenvolvimento](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)](https://github.com/seu-usuario/sites_management) - [![My Skills](https://skillicons.dev/icons?i=django,python,supabase,aws,docker)](https://skillicons.dev) 👈🏻 Tecnologias pensadas para o projeto
 ##### O projeto está no inicio e tem muita coisa para ser feita principalmente a tratativa de erros e coisas do tipo, mas espero que vocês possam testar e me dar uns feedbacks 
 ---
-## Tecnologias que estarão no projeto👇🏻
-[![My Skills](https://skillicons.dev/icons?i=django,python,supabase,aws,docker)](https://skillicons.dev)
-
 **Objetivo:**
 
 Este projeto demonstra a criação de uma aplicação web simples usando Streamlit para cadastrar sites. O foco principal é mostrar como implementar funções de validação de dados para campos.

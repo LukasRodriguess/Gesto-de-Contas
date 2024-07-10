@@ -1,7 +1,7 @@
 import streamlit as st
-from src.models.conta_modelo import Conta
 from src.controllers import cadastro_controlador as control
 from src.db.supabase import exibir_emails, exibir_tags, cadastrar_site, exibir_dados_tabela
+from src.models.conta_modelo import Conta
 
 
 # Todo o st.columns é unica e exclusivamente visual
